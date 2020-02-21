@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Player is now colliding with " + collision.name);
         if (waitTime <= 0.0f)
         {
-            if (collision.name.Contains("Tool") || collision.name.Contains("Seed"))
+            if (collision.name.Contains("Tool") || collision.name.Contains("Seed") || collision.name.Contains("Crop"))
             {
                 if (Input.GetKey(KeyCode.E))
                 {
@@ -98,12 +98,22 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("This object is plowed ground!");
                 PlowedGroundScript plowedGroundScript = collision.gameObject.GetComponent<PlowedGroundScript>();
-
-                if (Input.GetKey(KeyCode.Space) && currentlyEquipped.Contains("Seed") && plowedGroundScript.currentlyPlanted == "none")
+                if (currentlyEquipped.Contains("Seed") && plowedGroundScript.currentlyPlanted == "none")
                 {
-                    plowedGroundScript.currentlyPlanted = currentlyEquipped;
-                    collision.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/" + currentlyEquipped + "_" + plowedGroundScript.saturation);
-                    waitTime = 0.5f;
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        plowedGroundScript.currentlyPlanted = currentlyEquipped;
+                        collision.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/" + currentlyEquipped + "_" + plowedGroundScript.saturation);
+                        waitTime = 0.5f;
+                    }
+                }
+                else if (currentlyEquipped.Contains("Wateringcan") && plowedGroundScript.saturation == "Dry")
+                {
+                    if (Input.GetKey(KeyCode.Space))
+                    {
+                        plowedGroundScript.saturation = "Wet";
+                        waitTime = 0.5f;
+                    }
                 }
             }
         }

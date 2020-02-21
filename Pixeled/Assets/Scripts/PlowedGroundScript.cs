@@ -20,20 +20,24 @@ public class PlowedGroundScript : MonoBehaviour
     {
         Sprite[] currentSprites = Resources.LoadAll<Sprite>("Plants/" + currentlyPlanted + "_" + saturation);
         Sprite currentSprite = GetComponent<SpriteRenderer>().sprite;
-        if (currentlyPlanted == "none")
+        if (!GetComponent<SpriteRenderer>().sprite.name.Contains("5"))
         {
-            if (currentSprite.name != "PlowedGround_" + saturation)
+            if (currentlyPlanted == "none")
             {
-                currentSprite = Resources.Load<Sprite>("Prefabs/PlowedGround_" + saturation);
+                if (currentSprite.name != "PlowedGround_" + saturation)
+                {
+                    GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/PlowedGround_" + saturation);
+                }
             }
-        }
-        else
-        {
-            growTime += Time.deltaTime;
-            Debug.Log(growTime);
-            if (currentSprite.name != currentlyPlanted + "_" + saturation + "_" + plantGrowth())
+            else
             {
-                GetComponent<SpriteRenderer>().sprite = currentSprites[plantGrowth()];
+                if (saturation == "Wet")
+                    growTime += Time.deltaTime;
+                //Debug.Log(growTime); // DEBUG TIME SHOWN
+                if (currentSprite.name != currentlyPlanted + "_" + saturation + "_" + plantGrowth())
+                {
+                    GetComponent<SpriteRenderer>().sprite = currentSprites[plantGrowth()];
+                }
             }
         }
     }
@@ -43,7 +47,9 @@ public class PlowedGroundScript : MonoBehaviour
         int time = Mathf.FloorToInt(growTime);
         time *= growMultiplier;
 
-        if (time >= 400)
+        if (time >= 800)
+            return 5;
+        else if (time >= 400)
             return 4;
         else
             return time / 100;
