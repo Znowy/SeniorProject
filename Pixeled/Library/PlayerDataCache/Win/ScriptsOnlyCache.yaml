@@ -17,7 +17,6 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
-    - UnityEditor.TestTools.TestRunner.TestListCacheData
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -506,4 +505,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Winter Sprint 7/Pixeled.exe
+  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Winter Sprint 8/Pixeled.exe
