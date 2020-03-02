@@ -14,13 +14,46 @@ public class PlowedGroundScript : MonoBehaviour
     {
         
     }
+    
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.name == "Player")
+        {
+            PlayerController playerControllerScript = collision.gameObject.GetComponent<PlayerController>();
+            if (GetComponent<SpriteRenderer>().sprite.name.Contains("5") && playerControllerScript.currentlyEquipped.Contains("Hoe"))
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    currentlyPlanted = "none";
+                    saturation = "Dry";
+                    growTime = 0;
+                    GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/PlowedGround_Dry");
+                }
+            }
+            else if (playerControllerScript.currentlyEquipped.Contains("Seed") && currentlyPlanted == "none")
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    currentlyPlanted = playerControllerScript.currentlyEquipped;
+                    GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/" + playerControllerScript.currentlyEquipped + "_" + saturation);
+                }
+            }
+            else if (playerControllerScript.currentlyEquipped.Contains("Wateringcan") && saturation == "Dry")
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    saturation = "Wet";
+                }
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
         Sprite[] currentSprites = Resources.LoadAll<Sprite>("Plants/" + currentlyPlanted + "_" + saturation);
         Sprite currentSprite = GetComponent<SpriteRenderer>().sprite;
-        if (!GetComponent<SpriteRenderer>().sprite.name.Contains("5"))
+        if (!GetComponent<SpriteRenderer>().sprite.name.Contains("5")) // [ If plant is not withered ]
         {
             if (currentlyPlanted == "none")
             {

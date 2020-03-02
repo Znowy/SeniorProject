@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     const int STATE_IDLE_RIGHT = 14;
     int currentState = 0;
 
-    static string currentlyEquipped = "none";
+    public string currentlyEquipped = "none";
     float waitTime = 0.0f;
     GameObject plowedGround;
 
@@ -40,20 +40,27 @@ public class PlayerController : MonoBehaviour
         if (waitTime > 0)
             waitTime -= Time.deltaTime;
 
-        if (currentlyEquipped == "Tool_Hoe")
+        if (waitTime <= 0.0f)
         {
             if (Input.GetKey(KeyCode.Space))
             {
-                if (waitTime <= 0.0f)
+                if (currentlyEquipped == "Tool_Hoe")
                 {
                     if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
                     {
-                        GameObject instantiatedObject = Instantiate(plowedGround, new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), Quaternion.identity);
-                        if (instantiatedObject.name.Contains("(Clone)"))
-                            instantiatedObject.name = instantiatedObject.name.Replace("(Clone)", "");
+                        CreateObject(plowedGround);
                         Debug.Log("Player has plowed the ground!");
                         waitTime = 0.5f;
                     }
+                }
+            }
+            else if (Input.GetKey(KeyCode.E))
+            {
+                if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                {
+                    CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
+                    currentlyEquipped = "none";
+                    waitTime = 0.5f;
                 }
             }
         }
@@ -61,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        Debug.Log("Player is now colliding with " + collision.name);
+        //Debug.Log("Player is now colliding with " + collision.name);
         if (waitTime <= 0.0f)
         {
             if (collision.name.Contains("Tool") || collision.name.Contains("Seed") || collision.name.Contains("Crop"))
@@ -73,11 +80,8 @@ public class PlayerController : MonoBehaviour
                         // Drop currently equipped object before picking up another one.
                         if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 3)
                         {
-                            GameObject instantiatedObject = Instantiate(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped), new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), Quaternion.identity);
-                            if (instantiatedObject.name.Contains("(Clone)"))
-                                instantiatedObject.name = instantiatedObject.name.Replace("(Clone)", "");
+                            CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
                             Debug.Log("Player has dropped " + currentlyEquipped + " on the ground!");
-
 
                             currentlyEquipped = collision.name;
                             Destroy(collision.gameObject);
@@ -90,28 +94,6 @@ public class PlayerController : MonoBehaviour
                         Debug.Log("Player has picked up the " + collision.name);
                         currentlyEquipped = collision.name;
                         Destroy(collision.gameObject);
-                        waitTime = 0.5f;
-                    }
-                }
-            }
-            else if (collision.name.Contains("PlowedGround"))
-            {
-                Debug.Log("This object is plowed ground!");
-                PlowedGroundScript plowedGroundScript = collision.gameObject.GetComponent<PlowedGroundScript>();
-                if (currentlyEquipped.Contains("Seed") && plowedGroundScript.currentlyPlanted == "none")
-                {
-                    if (Input.GetKey(KeyCode.Space))
-                    {
-                        plowedGroundScript.currentlyPlanted = currentlyEquipped;
-                        collision.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/" + currentlyEquipped + "_" + plowedGroundScript.saturation);
-                        waitTime = 0.5f;
-                    }
-                }
-                else if (currentlyEquipped.Contains("Wateringcan") && plowedGroundScript.saturation == "Dry")
-                {
-                    if (Input.GetKey(KeyCode.Space))
-                    {
-                        plowedGroundScript.saturation = "Wet";
                         waitTime = 0.5f;
                     }
                 }
@@ -158,5 +140,12 @@ public class PlayerController : MonoBehaviour
                 anim.SetInteger("state", anim.GetInteger("state") + 10);
             //Debug.Log("Current State: " + anim.GetInteger("state"));
         }
+    }
+
+    private void CreateObject(GameObject gameObj)
+    {
+        GameObject instantiatedObject = Instantiate(gameObj, new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), Quaternion.identity);
+        if (instantiatedObject.name.Contains("(Clone)"))
+            instantiatedObject.name = instantiatedObject.name.Replace("(Clone)", "");
     }
 }
