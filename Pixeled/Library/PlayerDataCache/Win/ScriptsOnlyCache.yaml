@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - PlayerController
     - PlowedGroundScript
     Unity.2D.Tilemap.Editor.dll:
+    - UnityEditor.Tilemaps.GridBrush
     - UnityEditor.Tilemaps.GridPaintingState
     - UnityEditor.Tilemaps.GridPaletteBrushes
     - UnityEditor.Tilemaps.GridPalettes
@@ -17,6 +18,7 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
+    - UnityEditor.TestTools.TestRunner.TestListCacheData
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -156,7 +158,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: 0606eb6892f0f819bb147ca6a5784dc6
+      Hash: 1da26dfe1caf0ce17bd504bc1213d86e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -505,4 +507,4 @@ ScriptsOnlyBuild:
   platform: 5
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Winter Sprint 8/Pixeled.exe
+  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Winter Sprint 9/Pixeled.exe
