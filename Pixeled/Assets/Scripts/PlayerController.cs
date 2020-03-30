@@ -56,11 +56,14 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetKey(KeyCode.E))
             {
-                if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                if (currentlyEquipped != "none")
                 {
-                    CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
-                    currentlyEquipped = "none";
-                    waitTime = 0.5f;
+                    if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                    {
+                        CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
+                        currentlyEquipped = "none";
+                        waitTime = 0.5f;
+                    }
                 }
             }
         }

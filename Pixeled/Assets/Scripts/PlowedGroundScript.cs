@@ -7,6 +7,7 @@ public class PlowedGroundScript : MonoBehaviour
     public string currentlyPlanted = "none";
     public float growTime = 0;
     public string saturation = "Dry";
+    public bool fertilized = false;
     public int growMultiplier = 20;
 
     // Start is called before the first frame update
@@ -24,10 +25,17 @@ public class PlowedGroundScript : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    currentlyPlanted = "none";
-                    saturation = "Dry";
-                    growTime = 0;
-                    GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/PlowedGround_Dry");
+                    resetGround();
+                }
+            }
+            else if (GetComponent<SpriteRenderer>().sprite.name.Contains("4") && playerControllerScript.currentlyEquipped.Contains("none"))
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    playerControllerScript.currentlyEquipped = currentlyPlanted.Replace("Seed", "Crop");
+                    if (fertilized)
+                        playerControllerScript.currentlyEquipped += "F";
+                    resetGround();
                 }
             }
             else if (playerControllerScript.currentlyEquipped.Contains("Seed") && currentlyPlanted == "none")
@@ -43,6 +51,14 @@ public class PlowedGroundScript : MonoBehaviour
                 if (Input.GetKey(KeyCode.Space))
                 {
                     saturation = "Wet";
+                }
+            }
+            else if (playerControllerScript.currentlyEquipped.Contains("Fertilizer") && fertilized == false)
+            {
+                if (Input.GetKey(KeyCode.Space))
+                {
+                    fertilized = true;
+
                 }
             }
         }
@@ -65,7 +81,11 @@ public class PlowedGroundScript : MonoBehaviour
             else
             {
                 if (saturation == "Wet")
+                {
+                    if (fertilized)
+                        growTime += Time.deltaTime;
                     growTime += Time.deltaTime;
+                }
                 //Debug.Log(growTime); // DEBUG TIME SHOWN
                 if (currentSprite.name != currentlyPlanted + "_" + saturation + "_" + plantGrowth())
                 {
@@ -86,5 +106,14 @@ public class PlowedGroundScript : MonoBehaviour
             return 4;
         else
             return time / 100;
+    }
+
+    void resetGround()
+    {
+        currentlyPlanted = "none";
+        saturation = "Dry";
+        fertilized = false;
+        growTime = 0;
+        GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Plants/PlowedGround_Dry");
     }
 }
