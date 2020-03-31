@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+            Application.Quit();
+
         if (waitTime > 0)
             waitTime -= Time.deltaTime;
 
