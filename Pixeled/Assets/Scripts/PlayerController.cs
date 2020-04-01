@@ -20,9 +20,11 @@ public class PlayerController : MonoBehaviour
     const int STATE_IDLE_RIGHT = 14;
     int currentState = 0;
 
+    protected int money;
     public string currentlyEquipped = "none";
     float waitTime = 0.0f;
     GameObject plowedGround;
+    MoneyScript moneyScript;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,10 @@ public class PlayerController : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         plowedGround = Resources.Load<GameObject>("Prefabs/PlowedGround_Dry");
+        moneyScript = GameObject.Find("MoneyAmount").GetComponent<MoneyScript>();
+
+        money = 100;
+        moneyScript.UpdateMoneyText(money);
 
         Debug.Log("Game Loaded");
     }
@@ -153,5 +159,11 @@ public class PlayerController : MonoBehaviour
         GameObject instantiatedObject = Instantiate(gameObj, new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), Quaternion.identity);
         if (instantiatedObject.name.Contains("(Clone)"))
             instantiatedObject.name = instantiatedObject.name.Replace("(Clone)", "");
+    }
+
+    public void AddMoney(int AmountOfMoney)
+    {
+        money += AmountOfMoney;
+        moneyScript.UpdateMoneyText(money);
     }
 }
