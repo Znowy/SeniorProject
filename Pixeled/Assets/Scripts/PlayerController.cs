@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class PlayerController : MonoBehaviour
     float waitTime = 0.0f;
     GameObject plowedGround;
     MoneyScript moneyScript;
+    EquippedItemScript equippedItemScript;
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +35,12 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         plowedGround = Resources.Load<GameObject>("Prefabs/PlowedGround_Dry");
         moneyScript = GameObject.Find("MoneyAmount").GetComponent<MoneyScript>();
+        equippedItemScript = GameObject.Find("ItemBackground").GetComponent<EquippedItemScript>();
 
         money = 100;
         moneyScript.UpdateMoneyText(money);
+
+        equippedItemScript.EmptyEquippedItem();
 
         Debug.Log("Game Loaded");
     }
@@ -71,6 +76,7 @@ public class PlayerController : MonoBehaviour
                     {
                         CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
                         currentlyEquipped = "none";
+                        equippedItemScript.EmptyEquippedItem();
                         waitTime = 0.5f;
                     }
                 }
@@ -108,6 +114,7 @@ public class PlayerController : MonoBehaviour
                         Destroy(collision.gameObject);
                         waitTime = 0.5f;
                     }
+                    equippedItemScript.UpdateEquippedItem(currentlyEquipped);
                 }
             }
         }
