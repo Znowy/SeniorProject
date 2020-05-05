@@ -22,7 +22,26 @@ public class PlayerController : MonoBehaviour
     int currentState = 0;
 
     protected int money;
-    public string currentlyEquipped = "none";
+    private string _currentlyEquipped;
+    public string currentlyEquipped
+    {
+        get
+        {
+            return _currentlyEquipped;
+        }
+        set
+        {
+            _currentlyEquipped = value;
+            if (_currentlyEquipped == "none")
+            {
+                equippedItemScript.EmptyEquippedItem();
+            }
+            else
+            {
+                equippedItemScript.UpdateEquippedItem(value);
+            }
+        }
+    }
     float waitTime = 0.0f;
     GameObject plowedGround;
     MoneyScript moneyScript;
@@ -36,6 +55,8 @@ public class PlayerController : MonoBehaviour
         plowedGround = Resources.Load<GameObject>("Prefabs/PlowedGround_Dry");
         moneyScript = GameObject.Find("MoneyAmount").GetComponent<MoneyScript>();
         equippedItemScript = GameObject.Find("ItemBackground").GetComponent<EquippedItemScript>();
+
+        currentlyEquipped = "none";
 
         money = 100;
         moneyScript.UpdateMoneyText(money);
@@ -76,7 +97,6 @@ public class PlayerController : MonoBehaviour
                     {
                         CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
                         currentlyEquipped = "none";
-                        equippedItemScript.EmptyEquippedItem();
                         waitTime = 0.5f;
                     }
                 }
@@ -114,7 +134,6 @@ public class PlayerController : MonoBehaviour
                         Destroy(collision.gameObject);
                         waitTime = 0.5f;
                     }
-                    equippedItemScript.UpdateEquippedItem(currentlyEquipped);
                 }
             }
         }

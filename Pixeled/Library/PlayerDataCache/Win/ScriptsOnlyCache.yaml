@@ -1,6 +1,7 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - EquippedItemScript
     - MainMenuController
     - MoneyScript
     - PlayerController
@@ -20,6 +21,7 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
+    - UnityEditor.TestTools.TestRunner.TestListCacheData
     UnityEngine.UI.dll:
     - UnityEngine.EventSystems.EventSystem
     - UnityEngine.EventSystems.StandaloneInputModule
@@ -79,11 +81,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10488}
     - Class: 114
-      Script: {instanceID: 11116}
+      Script: {instanceID: 10908}
     - Class: 114
-      Script: {instanceID: 11236}
+      Script: {instanceID: 11118}
     - Class: 114
-      Script: {instanceID: 11488}
+      Script: {instanceID: 11238}
+    - Class: 114
+      Script: {instanceID: 11490}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -146,11 +150,11 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10642}
     - Class: 114
-      Script: {instanceID: 11044}
+      Script: {instanceID: 11046}
     - Class: 114
-      Script: {instanceID: 11116}
+      Script: {instanceID: 11118}
     - Class: 114
-      Script: {instanceID: 11488}
+      Script: {instanceID: 11490}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -254,7 +258,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: 1da26dfe1caf0ce17bd504bc1213d86e
+      Hash: 0606eb6892f0f819bb147ca6a5784dc6
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -476,6 +480,12 @@ ScriptsOnlyBuild:
     className: Physics2DRaycaster
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EquippedItemScript
+  - hash:
+      serializedVersion: 2
       Hash: c1933cc0a2f4ff6eb13333347497beb3
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -622,4 +632,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/Gameplay.unity
-  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Spring Sprint 12/Pixeled.exe
+  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Spring Sprint 13/Pixeled.exe

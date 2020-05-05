@@ -267,7 +267,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: '''E'' - Pickup/Drop Item
 
-    ''Space'' - Use Item/Tool, and Harvest/Plant Crops
+    ''Space'' - Use Item/Tool, and Harvest/Plant/Sell Crops
 
 
     Hint: To harvest crops, your hands must be empty.'
