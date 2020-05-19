@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    private string savePath;
+
     public float speed;
     public float maxSpeed;
     Rigidbody2D rb2d;
@@ -42,101 +45,113 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    float waitTime = 0.0f;
+
+    bool isColliding;
+    Collider2D collidingObject;
     GameObject plowedGround;
     MoneyScript moneyScript;
     EquippedItemScript equippedItemScript;
+    PauseMenuScript pauseMenuScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        savePath = Application.dataPath + "/savedata.json";
+
         rb2d = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        isColliding = false;
         plowedGround = Resources.Load<GameObject>("Prefabs/PlowedGround_Dry");
         moneyScript = GameObject.Find("MoneyAmount").GetComponent<MoneyScript>();
         equippedItemScript = GameObject.Find("ItemBackground").GetComponent<EquippedItemScript>();
+        pauseMenuScript = GameObject.Find("GameUI").GetComponent<PauseMenuScript>();
 
         currentlyEquipped = "none";
 
         money = 100;
-        moneyScript.UpdateMoneyText(money);
 
         equippedItemScript.EmptyEquippedItem();
 
+        LoadData();
         Debug.Log("Game Loaded");
+
+        moneyScript.UpdateMoneyText(money);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Escape))
-            Application.Quit();
-
-        if (waitTime > 0)
-            waitTime -= Time.deltaTime;
-
-        if (waitTime <= 0.0f)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (Input.GetKey(KeyCode.Space))
+            pauseMenuScript.isGamePaused = !pauseMenuScript.isGamePaused;
+        }
+        if (!pauseMenuScript.isGamePaused)
+        {
+            if (isColliding)
             {
-                if (currentlyEquipped == "Tool_Hoe")
+                if (collidingObject.name.Contains("Tool") || collidingObject.name.Contains("Seed") || collidingObject.name.Contains("Crop"))
                 {
-                    if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                    if (Input.GetKeyDown(KeyCode.E))
                     {
-                        CreateObject(plowedGround);
-                        Debug.Log("Player has plowed the ground!");
-                        waitTime = 0.5f;
+                        if (currentlyEquipped != "none")
+                        {
+                            // Drop currently equipped object before picking up another one.
+                            if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 3)
+                            {
+                                CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
+                                Debug.Log("Player has dropped " + currentlyEquipped + " on the ground!");
+
+                                currentlyEquipped = collidingObject.name;
+                                Destroy(collidingObject.gameObject);
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Player has picked up the " + collidingObject.name);
+                            currentlyEquipped = collidingObject.name;
+                            Destroy(collidingObject.gameObject);
+                        }
                     }
                 }
             }
-            else if (Input.GetKey(KeyCode.E))
+            else
             {
-                if (currentlyEquipped != "none")
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                    if (currentlyEquipped == "Tool_Hoe")
                     {
-                        CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
-                        currentlyEquipped = "none";
-                        waitTime = 0.5f;
+                        if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                        {
+                            CreateObject(plowedGround);
+                            Debug.Log("Player has plowed the ground!");
+                        }
+                    }
+                }
+                else if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (currentlyEquipped != "none")
+                    {
+                        if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 2)
+                        {
+                            CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
+                            currentlyEquipped = "none";
+                        }
                     }
                 }
             }
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         //Debug.Log("Player is now colliding with " + collision.name);
-        if (waitTime <= 0.0f)
-        {
-            if (collision.name.Contains("Tool") || collision.name.Contains("Seed") || collision.name.Contains("Crop"))
-            {
-                if (Input.GetKey(KeyCode.E))
-                {
-                    if (currentlyEquipped != "none")
-                    {
-                        // Drop currently equipped object before picking up another one.
-                        if (Physics2D.OverlapBoxAll(new Vector2(rb2d.position.x, rb2d.position.y + offsetPlayer.y), new Vector2(0.08f, 0.08f), 0f).Length < 3)
-                        {
-                            CreateObject(Resources.Load<GameObject>("Prefabs/" + currentlyEquipped));
-                            Debug.Log("Player has dropped " + currentlyEquipped + " on the ground!");
+        isColliding = true;
+        collidingObject = collision;
+    }
 
-                            currentlyEquipped = collision.name;
-                            Destroy(collision.gameObject);
-
-                            waitTime = 0.5f;
-                        }
-                    }
-                    else
-                    {
-                        Debug.Log("Player has picked up the " + collision.name);
-                        currentlyEquipped = collision.name;
-                        Destroy(collision.gameObject);
-                        waitTime = 0.5f;
-                    }
-                }
-            }
-        }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        isColliding = false;
     }
 
     // FixedUpdate is called at a fixed interval and is independent of frame rate, put physics code here
@@ -192,4 +207,33 @@ public class PlayerController : MonoBehaviour
         money += AmountOfMoney;
         moneyScript.UpdateMoneyText(money);
     }
+
+    private void SaveData()
+    {
+        SaveModel saveModel = new SaveModel();
+        saveModel._money = money;
+
+        string jsonData = JsonUtility.ToJson(saveModel);
+        File.WriteAllText(savePath, jsonData);
+        Debug.Log("JSON: " + jsonData);
+    }
+
+    private void LoadData()
+    {
+        if (File.Exists(savePath))
+        {
+            SaveModel saveModel = JsonUtility.FromJson<SaveModel>(File.ReadAllText(savePath));
+            money = saveModel._money;
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveData();
+    }
+}
+
+public class SaveModel
+{
+    public int _money;
 }

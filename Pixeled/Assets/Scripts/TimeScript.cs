@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class TimeScript : MonoBehaviour
 {
-    public bool isGamePaused;
     public int gameTime;
 
     protected Text timeText;
@@ -19,14 +18,14 @@ public class TimeScript : MonoBehaviour
         }
         set
         {
-            if (_updateTimer < 60 && value >= 60)
+            if (_updateTimer < 6 && value >= 6)
             {
-                _updateTimer = 60;
+                _updateTimer = 6;
             }
-            else if (_updateTimer == 60)
+            else if (_updateTimer == 6)
             {
-                _updateTimer = value - 60;
-                gameTime += 60;
+                _updateTimer = value - 6;
+                gameTime += 1;
                 UpdateTime();
             }
             else
@@ -39,8 +38,7 @@ public class TimeScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isGamePaused = false;
-        gameTime = 21600;
+        gameTime = 360; // Start at 6
 
         timeText = GameObject.Find("TimeDisplay").GetComponent<Text>();
         UpdateTime();
@@ -48,21 +46,18 @@ public class TimeScript : MonoBehaviour
         updateTimer = 0;
     }
 
-    // Update is called once per frame
-    void Update()
+    // FixedUpdate is called at a fixed interval and is independent of frame rate, put physics code here
+    void FixedUpdate()
     {
-        if (!isGamePaused)
-        {
-            updateTimer += Time.deltaTime;
-            Debug.Log("Game Time: " + gameTime + ", Update Timer: " + updateTimer);
-        }
+        updateTimer += Time.deltaTime;
+        //Debug.Log("Game Time: " + gameTime + ", Update Timer: " + updateTimer);
     }
 
     void UpdateTime()
     {
-        gameTime %= 86400; // Seconds in a day
-        int hours = gameTime / 3600;
-        int minutes = (gameTime / 60) - (hours * 60);
+        gameTime %= 1440; // Seconds in a day
+        int hours = gameTime / 60;
+        int minutes = gameTime % 60;
 
         if (hours > 12)
         {
@@ -74,7 +69,5 @@ public class TimeScript : MonoBehaviour
         }
 
         timeText.text = hours + ":" + minutes.ToString().PadLeft(2, '0');
-
-        Debug.Log("UPDATED TIME");
     }
 }

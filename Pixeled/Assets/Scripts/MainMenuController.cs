@@ -5,71 +5,39 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    GameObject startButton;
-    GameObject exitButton;
-    GameObject controlsButton;
-    GameObject backButton;
-    GameObject pixeledTitle;
-    GameObject controlsText;
-
-    bool IsControlsMenu;
+    GameObject MainMenu;
+    GameObject ControlsMenu;
+    GameObject BasicMenu;
 
     private void Start()
     {
-        startButton = GameObject.Find("StartButton");
-        exitButton = GameObject.Find("ExitButton");
-        controlsButton = GameObject.Find("ControlsButton");
-        backButton = GameObject.Find("BackButton");
-        pixeledTitle = GameObject.Find("PixeledTitle");
-        controlsText = GameObject.Find("ControlsText");
+        MainMenu = GameObject.Find("MainMenu");
+        BasicMenu = GameObject.Find("BasicMenu");
+        ControlsMenu = GameObject.Find("ControlsMenu");
 
-        backButton.SetActive(false);
-        controlsText.SetActive(false);
-
-        IsControlsMenu = false;
+        MainMenu.SetActive(true);
+        ControlsMenu.SetActive(false);
     }
 
-    public void StartGame()
+    public void Play()
     {
         SceneManager.LoadScene("Gameplay");
     }
 
-    public void ControlsMenu()
+    public void Controls()
     {
-        if (IsControlsMenu)
-        {
-            startButton.SetActive(true);
-            exitButton.SetActive(true);
-            controlsButton.SetActive(true);
-            pixeledTitle.SetActive(true);
+        BasicMenu.SetActive(false);
+        ControlsMenu.SetActive(true);
+    }
 
-            backButton.SetActive(false);
-            controlsText.SetActive(false);
-
-            IsControlsMenu = false;
-        }
-        else
-        {
-            startButton.SetActive(false);
-            exitButton.SetActive(false);
-            controlsButton.SetActive(false);
-            pixeledTitle.SetActive(false);
-
-            backButton.SetActive(true);
-            controlsText.SetActive(true);
-
-            IsControlsMenu = true;
-        }
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     public void Back()
     {
-        if (IsControlsMenu)
-            ControlsMenu();
-    }
-
-    public void ExitGame()
-    {
-        Application.Quit();
+        ControlsMenu.SetActive(false);
+        BasicMenu.SetActive(true);
     }
 }
