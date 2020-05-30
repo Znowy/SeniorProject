@@ -652,4 +652,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MainMenu.unity
   - Assets/Scenes/Gameplay.unity
-  playerPath: C:/Users/jknud/Desktop/Game Builds/Pixeled - Spring Sprint 14/Pixeled.exe
+  playerPath: C:/Users/jknud/Desktop/Pixeled - Final Build/Pixeled.exe
