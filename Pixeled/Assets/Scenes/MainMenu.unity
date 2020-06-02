@@ -269,6 +269,8 @@ MonoBehaviour:
 
     ''Space'' - Use Item/Tool, and Harvest/Plant/Sell Crops
 
+    ''Esc'' - Pause Game
+
 
     Hint: To harvest crops, your hands must be empty.'
 --- !u!222 &55035752

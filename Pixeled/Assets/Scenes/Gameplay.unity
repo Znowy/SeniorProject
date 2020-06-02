@@ -540,6 +540,8 @@ MonoBehaviour:
 
     ''Space'' - Use Item/Tool, and Harvest/Plant/Sell Crops
 
+    ''Esc'' - Pause Game
+
 
     Hint: To harvest crops, your hands must be empty.'
 --- !u!222 &678278690
@@ -14182,7 +14184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000030517578, y: 0.0010070801}
+  m_AnchoredPosition: {x: 0, y: 0.0010070801}
   m_SizeDelta: {x: 0, y: -0.1000061}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1473529729

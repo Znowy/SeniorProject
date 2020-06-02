@@ -18,7 +18,7 @@ public class PlowedGroundScript : MonoBehaviour
     
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.name == "Player")
+        if (collision.name == "Player") // SWAP IF STATEMENTS TO HAVE KEY INPUT ON OUTSIDE?
         {
             PlayerController playerControllerScript = collision.gameObject.GetComponent<PlayerController>();
             if (GetComponent<SpriteRenderer>().sprite.name.Contains("5") && playerControllerScript.currentlyEquipped.Contains("Hoe"))
